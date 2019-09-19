@@ -1,0 +1,20 @@
+.app {
+  position: relative;
+  height: 100%;
+}
+
+.game {
+  display: grid;
+  //grid-template-areas: "top top top" "messages field messages" "pokemon cards user";
+  grid-template-areas: "head head head""messages field ss""pokemon cards user";
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 0.6fr 1fr;
+  position: relative;
+  height: 100%;
+}
+
+:global(#sapper) {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
