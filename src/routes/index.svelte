@@ -6,10 +6,10 @@
   import Pikachu from "../components/icons/pikachu.svelte";
 </script>
 
-<style src="./index.scss">
+<style  src="./index.scss">
 
 </style>
-
+ 
 <div class="app">
   <Background />
   <div class="game">
