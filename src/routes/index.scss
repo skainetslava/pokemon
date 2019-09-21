@@ -1,16 +1,24 @@
 .app {
   position: relative;
-  height: 100%;
+  margin: 24px;
+  min-width: 1000px;
+  background: rgba(0, 0, 0, 0.1)
 }
 
 .game {
   display: grid;
-  //grid-template-areas: "top top top" "messages field messages" "pokemon cards user";
-  grid-template-areas: "head head head""messages field ss""pokemon cards user";
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 1fr 0.6fr 1fr;
+  grid-template-areas: "field" "footer";
+  grid-template-rows: 2fr 1fr;
+  grid-template-columns: 1fr;
   position: relative;
   height: 100%;
+}
+
+.footer {
+  grid-area: footer;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 0.6fr 1fr;
 }
 
 :global(#sapper) {

@@ -6,7 +6,6 @@
 
 <style lang="scss">
     .cards {
-        grid-area: cards;
         display: flex;
         align-items: center;
         justify-content: space-between;

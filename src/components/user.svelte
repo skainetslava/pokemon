@@ -4,7 +4,6 @@
 
 <style>
   .user {
-    grid-area: user;
     width: 150px;
     height: 150px;
     border: 1px solid green;

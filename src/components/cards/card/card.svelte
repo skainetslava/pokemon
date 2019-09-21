@@ -6,9 +6,9 @@
 <style lang="scss">
   .card {
     position: relative;
-    width: 132px;
-    height: 192px;
-    margin: 0 8px;
+    width: 102px;
+    height: 162px;
+    margin: 0 4px;
     bottom: 0;
     transition: all .4s ease;
     cursor: pointer;
