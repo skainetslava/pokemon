@@ -1,12 +1,30 @@
 <script>
-import { tick, afterUpdate } from 'svelte';
+  import { tick, onMount } from "svelte";
   import PikachuUnit from "./icons/pikachuUnit.svelte";
   import BulbazavrUnit from "./icons/bulbazavrUnit.svelte";
   import Skill from "./skill.svelte";
+  import { skillsStore } from '../stores/skills.js';
 
-  let w;
-  let h;
-  
+  let widthField;
+  let heightField;
+  let oneUnitElement;
+  let heightUnit;
+
+  $: topPositionOneUnit = 0;
+  let skills;
+
+	const unsubscribe = skillsStore.subscribe(value => {
+		skills = value;
+	});
+
+  onMount(() => {
+    let rect = oneUnitElement.getBoundingClientRect();
+    topPositionOneUnit = rect.top;
+  });
+
+  const handleRemove = (event) => {
+    skillsStore.update((skills) => [ ...skills.filter(item => item.id !== event.detail.id)]);
+  }
 </script>
 
 <style lang="scss">
@@ -45,12 +63,25 @@ import { tick, afterUpdate } from 'svelte';
   }
 </style>
 
-<div class="field" bind:clientWidth={w} bind:clientHeight={h}>
-    <Skill widthField={w} heightField={h}/>
-  <div class="unit1">
-    <PikachuUnit />
+<div
+  class="field"
+  bind:clientWidth={widthField}
+  bind:clientHeight={heightField}>
 
+  {#each skills as skill(skill.id)}
+    <Skill
+      {widthField}
+      {heightField}
+      {heightUnit}
+      id={skill.id}
+      on:remove={handleRemove}
+      positionTopUnit={topPositionOneUnit} />
+  {/each}
+
+  <div class="unit1" bind:clientHeight={heightUnit} bind:this={oneUnitElement}>
+    <PikachuUnit />
   </div>
+
   <div class="unit2">
     <BulbazavrUnit />
   </div>

@@ -1,27 +1,30 @@
 <script>
- import { onMount } from 'svelte';
-
+  import { onMount, createEventDispatcher } from "svelte";
   import LightningIcon from "./icons/lightning.svelte";
   import animate from "../utils/animate.js";
+
+  const dispatch = createEventDispatcher();
+
   export let widthField;
   export let heightField;
-  $: a = heightField;
-  onMount(() => {
-    a = heightField;
-    console.log(a);
-  });
+  export let positionTopUnit;
+  export let heightUnit;
+  export let id;
 
-  console.log(heightField);
-  let leftPosition = 130;
-  let topPosition = 0;
+  let leftPosition = 160;
+
+  $: topPosition = positionTopUnit / 2 + heightUnit;
 
   const getRandomInteger = (min, max) => {
     let rand = min - 0.5 + Math.random() * (max - min + 1);
     return Math.round(rand);
   };
 
+  const handleRemove = () => {
+    dispatch("remove", { id });
+  };
+
   $: move = ({ top, left }) => {
-    console.log(widthField);
     if (leftPosition < 1200) {
       if (topPosition >= heightField - 50) {
         reverse = true;
@@ -36,22 +39,25 @@
       } else {
         topPosition = topPosition - getRandomInteger(left.min, left.max);
       }
+      return true;
+    } else {
+      handleRemove();
+      return false;
     }
   };
 
-  let reverse = false;
+  let direction = [true, false];
+  let reverse = direction[getRandomInteger(0, 1)];
+
+  const rndTop = getRandomInteger(1, 6);
+  const rndLeft = getRandomInteger(1, 6);
+
   const speed = {
-    top: { min: getRandomInteger(1, 6) },
-    left: { min: getRandomInteger(0, 4) }
+    top: { min: rndTop, max: rndTop + 1 },
+    left: { min: rndLeft, max: rndLeft + 1 }
   };
 
-  speed.top.max = speed.top.min + 1;
-  speed.left.max = speed.left.min + 1;
-
-  animate({
-    duration: 1000,
-    draw: () => move(speed)
-  });
+  animate(() => move(speed));
 </script>
 
 <style lang="scss">

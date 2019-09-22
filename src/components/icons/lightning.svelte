@@ -1,12 +1,13 @@
 <script>
-  export let left = 130;
-  export let top = 50;
+  export let left;
+  export let top;
 </script>
 
 <style>
   .skill {
     position: absolute;
     transition: left 2s ease-in-out top 2s ;
+    top: 50%;
   }
 </style>
 
