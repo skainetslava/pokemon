@@ -11,11 +11,10 @@
 </style>
 
 <div class="app">
-  <Background />
   <div class="game">
     <Field />
     <div class="footer">
-      <User />
+      <div />
       <Cards />
       <PokemonHero />
     </div>

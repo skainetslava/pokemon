@@ -3,28 +3,44 @@
   import PikachuUnit from "./icons/pikachuUnit.svelte";
   import BulbazavrUnit from "./icons/bulbazavrUnit.svelte";
   import Skill from "./skill.svelte";
-  import { skillsStore } from '../stores/skills.js';
+  import animate from "../utils/animate.js";
+  import { skillsStore, removeSkill } from "../stores/skills.js";
+  import { getRandomInteger } from "../utils/getRandomInteger.js";
 
   let widthField;
   let heightField;
-  let oneUnitElement;
+  let oneFirstElement;
   let heightUnit;
+  let fieldEl;
+  let firstUnitYCurrent = 0;
+  let firstUnitY = 0;
 
-  $: topPositionOneUnit = 0;
+  $: oneUnitX = 0;
+  //console.log(oneUnitXp);
   let skills;
 
-	const unsubscribe = skillsStore.subscribe(value => {
-		skills = value;
-	});
-
-  onMount(() => {
-    let rect = oneUnitElement.getBoundingClientRect();
-    topPositionOneUnit = rect.top;
+  const update = skillsStore.subscribe(value => {
+    skills = value;
   });
 
-  const handleRemove = (event) => {
-    skillsStore.update((skills) => [ ...skills.filter(item => item.id !== event.detail.id)]);
-  }
+  onMount(() => {
+    oneUnitX = oneFirstElement.getBoundingClientRect().left;
+  });
+
+  const handleRemove = event => {
+    removeSkill(event);
+  };
+
+  const move = ({ recalculate }) => {
+    console.log(firstUnitY);
+    if(firstUnitY > 800) {
+      return false;
+    }
+    firstUnitY = firstUnitY + getRandomInteger(5,5);
+    return true;
+  };
+
+  animate(move);
 </script>
 
 <style lang="scss">
@@ -33,15 +49,14 @@
     position: relative;
     width: 1168px;
     height: 100%;
+    margin: 16px;
     border: 1px solid green;
     border-radius: 2px;
   }
   .unit1 {
     position: absolute;
     left: 5%;
-    top: 50%;
-    transform: translateY(-50%);
-    //animation: go-left-right 1s infinite alternate;
+   // transition: 1s;
   }
 
   .unit2 {
@@ -66,19 +81,25 @@
 <div
   class="field"
   bind:clientWidth={widthField}
-  bind:clientHeight={heightField}>
-
-  {#each skills as skill(skill.id)}
+  bind:clientHeight={heightField}
+  bind:this={fieldEl}>
+  {firstUnitY}
+  {#each skills as skill (skill.id)}
     <Skill
       {widthField}
       {heightField}
       {heightUnit}
       id={skill.id}
       on:remove={handleRemove}
-      positionTopUnit={topPositionOneUnit} />
+      ownerX={oneUnitX}
+      ownerY={firstUnitY} />
   {/each}
 
-  <div class="unit1" bind:clientHeight={heightUnit} bind:this={oneUnitElement}>
+  <div
+    class="unit1"
+    bind:clientHeight={heightUnit}
+    bind:this={oneFirstElement}
+    style="top: {firstUnitY}px">
     <PikachuUnit />
   </div>
 

@@ -1,8 +1,8 @@
 <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 127.782 127.782"
-  width="128px"
-  height="128px">
+  width="78px"
+  height="78px">
   <path
     fill="#FFD400"
     d="M90.685 5.927L64.69 5.927 50.365 31.066 62.005 31.066 46.735 62.091
