@@ -4,43 +4,55 @@
   import BulbazavrUnit from "./icons/bulbazavrUnit.svelte";
   import Skill from "./skill.svelte";
   import animate from "../utils/animate.js";
-  import { skillsStore, removeSkill } from "../stores/skills.js";
-  import { getRandomInteger } from "../utils/getRandomInteger.js";
+
+  import { moveFirstUnit, moveSecondUnit, updateSpeed } from "../game/move.js";
+  import { generateSkill } from "../game/enemyBehaviour.js";
+
+  import { skillsStore } from "../stores/skills.js";
+  import { firstUnitStore } from "../stores/firstUnit.js";
+  import { secondUnitStore } from "../stores/secondUnit.js";
 
   let widthField;
   let heightField;
-  let oneFirstElement;
+
+  let firstElement;
   let heightUnit;
-  let fieldEl;
-  let firstUnitYCurrent = 0;
-  let firstUnitY = 0;
+  let heightSecondElement;
 
-  $: oneUnitX = 0;
-  //console.log(oneUnitXp);
-  let skills;
+  let secondElement;
 
-  const update = skillsStore.subscribe(value => {
-    skills = value;
-  });
+  $: enemy = {
+    x: $secondUnitStore.x,
+    y: $secondUnitStore.y
+  };
+
+  $: mate = {
+    x: $firstUnitStore.x,
+    y: $firstUnitStore.y
+  };
+
+  let show = false;
 
   onMount(() => {
-    oneUnitX = oneFirstElement.getBoundingClientRect().left;
+    enemy.height = heightSecondElement;
+
+    animate(() => moveFirstUnit(heightField, heightUnit));
+    animate(() => moveSecondUnit(heightField, heightUnit));
+    updateSpeed();
+    generateSkill();
   });
 
   const handleRemove = event => {
-    removeSkill(event);
+    skillsStore.remove(event);
   };
 
-  const move = ({ recalculate }) => {
-    console.log(firstUnitY);
-    if(firstUnitY > 800) {
-      return false;
+  const handleTrigger = event => {
+    if (event.detail.has === "enemy") {
+      firstUnitStore.update({ health: $firstUnitStore.health - 2 });
+    } else {
+      secondUnitStore.update({ health: $secondUnitStore.health - 2 });
     }
-    firstUnitY = firstUnitY + getRandomInteger(5,5);
-    return true;
   };
-
-  animate(move);
 </script>
 
 <style lang="scss">
@@ -49,23 +61,17 @@
     position: relative;
     width: 1168px;
     height: 100%;
-    margin: 16px;
     border: 1px solid green;
     border-radius: 2px;
   }
   .unit1 {
     position: absolute;
     left: 5%;
-   // transition: 1s;
   }
 
   .unit2 {
     position: absolute;
-    top: 20px;
     right: 5%;
-    top: 50%;
-    transform: translateY(-50%);
-    //animation: go-left-right 1s infinite alternate;
   }
 
   @keyframes go-left-right {
@@ -81,29 +87,35 @@
 <div
   class="field"
   bind:clientWidth={widthField}
-  bind:clientHeight={heightField}
-  bind:this={fieldEl}>
-  {firstUnitY}
-  {#each skills as skill (skill.id)}
+  bind:clientHeight={heightField}>
+  {$firstUnitStore.health}
+  {$secondUnitStore.health}
+  {#each $skillsStore as skill (skill.id)}
     <Skill
       {widthField}
       {heightField}
       {heightUnit}
-      id={skill.id}
+      {skill}
+      on:trigger={handleTrigger}
       on:remove={handleRemove}
-      ownerX={oneUnitX}
-      ownerY={firstUnitY} />
+      {mate}
+      {enemy} />
   {/each}
-
+  {enemy.y}
   <div
     class="unit1"
     bind:clientHeight={heightUnit}
-    bind:this={oneFirstElement}
-    style="top: {firstUnitY}px">
+    bind:this={firstElement}
+    style="top: {$firstUnitStore.y}px">
+
     <PikachuUnit />
   </div>
 
-  <div class="unit2">
+  <div
+    class="unit2"
+    bind:clientHeight={heightSecondElement}
+    bind:this={secondElement}
+    style="top: {$secondUnitStore.y}px">
     <BulbazavrUnit />
   </div>
 </div>

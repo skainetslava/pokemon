@@ -1,16 +1,23 @@
 import { writable } from "svelte/store";
 
-export const skillsStore = writable([]);
+function createSkills() {
+  const { subscribe, set, update } = writable([]);
 
-export const getSkills = () => {
-  let skills;
-  const a = skillsStore.subscribe(value => {
-    skills = value;
-  });
+  return {
+    subscribe,
+    update: ({ id, x, y }) =>
+      update(skills => {
+        const index = skills.findIndex(item => item.id === id);
+        const newSkills = [...skills];
 
-  return skills;
-};
+        newSkills[index] = { ...skills[index], x, y };
+        return [...newSkills];
+      }),
+    add: (has) => update(skills => {
+      return [...skills, { id: Date.now(), has }]
+    }),
+    remove: event => update(skills => [...skills.filter(item => item.id !== event.id)])
+  };
+}
 
-export const removeSkill = event => {
-  skillsStore.update(skills => [...skills.filter(item => item.id !== event.detail.id)]);
-};
+export const skillsStore = createSkills();

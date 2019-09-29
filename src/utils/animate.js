@@ -1,22 +1,16 @@
-export default function animate(draw, speed) {
+export default function animate(draw) {
   if (typeof window === "undefined") {
     return;
   }
-
-  let then = Date.now();
-
+  let myReq;
+  
   window.requestAnimationFrame(function animate() {
-    let now = Date.now();
-
-    const recalculate = now - then > 1000;
-
-    if (recalculate) {
-      then = Date.now();
-    }
-    const isContinue = draw({ recalculate, speed });
+    const isContinue = draw();
 
     if (isContinue) {
-      window.requestAnimationFrame(animate);
+      myReq = window.requestAnimationFrame(animate);
+    } else {
+      window.cancelAnimationFrame(myReq)
     }
   });
 }
