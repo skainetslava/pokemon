@@ -14,7 +14,7 @@
     <div class="footer">
       <Stats />
       <Cards />
-      <div />
+       <Stats />
     </div>
   </div>
 </div>

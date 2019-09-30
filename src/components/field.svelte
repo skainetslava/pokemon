@@ -1,7 +1,10 @@
 <script>
   import { tick, onMount } from "svelte";
+  import { fly } from 'svelte/transition';
+
   import PikachuUnit from "./icons/pikachuUnit.svelte";
   import BulbazavrUnit from "./icons/bulbazavrUnit.svelte";
+
   import Skill from "./skill.svelte";
   import animate from "../utils/animate.js";
 
@@ -18,6 +21,7 @@
   let firstElement;
   let heightUnit;
   let heightSecondElement;
+  let notification;
 
   let secondElement;
 
@@ -49,8 +53,20 @@
   const handleTrigger = event => {
     if (event.detail.has === "enemy") {
       firstUnitStore.update({ health: $firstUnitStore.health - 2 });
+      notification = {
+        value: 2,
+      }
+      // setTimeout(() => {
+      //   notification = null;
+      // }, 2000)
     } else {
       secondUnitStore.update({ health: $secondUnitStore.health - 2 });
+       notification = {
+        value: 2,
+      }
+      setTimeout(() => {
+        notification = null;
+      }, 0)
     }
   };
 </script>
@@ -74,6 +90,13 @@
     right: 5%;
   }
 
+  .notification {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    background: red;
+  }
+
   @keyframes go-left-right {
     from {
       top: 10%;
@@ -88,8 +111,16 @@
   class="field"
   bind:clientWidth={widthField}
   bind:clientHeight={heightField}>
-  {$firstUnitStore.health}
-  {$secondUnitStore.health}
+  {#if notification}
+     <span 
+     class="notification"
+     out:fly="{{ y: -200, duration: 2000 }}"
+     top={firstUnitStore.y}
+     left={firstUnitStore.x}
+     >
+        {notification.value}
+     </span>
+  {/if}
   {#each $skillsStore as skill (skill.id)}
     <Skill
       {widthField}
