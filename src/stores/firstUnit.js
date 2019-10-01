@@ -4,7 +4,9 @@ function createFirstUnit() {
   const { subscribe, set, update } = writable({
     x: 90,
     y: 0,
-    health: 100
+    health: 100,
+    energy: 100,
+    shield: 100
   });
 
   return {

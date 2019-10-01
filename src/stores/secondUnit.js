@@ -2,9 +2,11 @@ import { writable } from "svelte/store";
 
 function createSecondUnit() {
   const { subscribe, set, update } = writable({
-    x: 1030,
+    x: 1035,
     y: 0,
-    health: 100
+    health: 100,
+    energy: 100,
+    shield: 100
   });
 
   return {

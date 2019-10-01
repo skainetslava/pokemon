@@ -1,6 +1,5 @@
 <script>
-  import { firstUnitStore } from "../stores/firstUnit.js";
-  import { secondUnitStore } from "../stores/secondUnit.js";
+  export let data;
 </script>
 
 <style>
@@ -30,7 +29,7 @@
   }
 
   .title {
-    margin-right: 8px;
+    font-size: 1.2rem;
   }
   .health_bar {
     background: red;
@@ -46,28 +45,22 @@
 <div class="stats">
   <section class="stat">
     <div class="bar">
-      <div
-        class="progress health_bar"
-        style="height: {$firstUnitStore.health}%;" />
+      <div class="progress health_bar" style="height: {data.health}%;" />
     </div>
-    <div class="title">Health</div>
+    <div class="title">{data.health}</div>
 
   </section>
   <section class="stat">
     <div class="bar">
-      <div
-        class="progress energy_bar"
-        style="height: {$firstUnitStore.health}%;" />
+      <div class="progress energy_bar" style="height: {data.energy}%;" />
     </div>
-    <div class="title">Energy</div>
+    <div class="title">{data.energy}</div>
 
   </section>
   <section class="stat">
     <div class="bar">
-      <div
-        class="progress shield_bar"
-        style="height: {$firstUnitStore.health}%;" />
+      <div class="progress shield_bar" style="height: {data.shield}%;" />
     </div>
-    <div class="title">Shield</div>
+    <div class="title">{data.shield}</div>
   </section>
 </div>
