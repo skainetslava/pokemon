@@ -2,10 +2,10 @@
   import Field from "../components/field.svelte";
   import Stats from "../components/stats.svelte";
   import Cards from "../components/cards/cards.svelte";
+  import Space from "../components/space.svelte";
 
   import { firstUnitStore } from "../stores/firstUnit.js";
   import { secondUnitStore } from "../stores/secondUnit.js";
-
 </script>
 
 <style>
@@ -48,6 +48,7 @@
 </style>
 
 <div class="app">
+  <Space />
   <div class="game">
     <Field />
     <div class="footer">

@@ -19,6 +19,8 @@
   }
 
   .bar {
+    display: flex;
+    align-items: flex-end;
     height: 140px;
   }
 

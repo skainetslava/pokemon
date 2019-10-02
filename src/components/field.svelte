@@ -2,8 +2,8 @@
   import { tick, onMount } from "svelte";
   import { fly } from "svelte/transition";
 
-  import PikachuUnit from "./icons/pikachuUnit.svelte";
-  import BulbazavrUnit from "./icons/bulbazavrUnit.svelte";
+  import SpaceshipUnit from "./icons/spaceship.svelte";
+  import UfoUnit from "./icons/ufo.svelte";
 
   import Skill from "./skill.svelte";
   import animate from "../utils/animate.js";
@@ -82,7 +82,6 @@
     width: 1168px;
     height: 100%;
     border: 1px solid green;
-    background: black;
     border-radius: 2px;
   }
   .unit1 {
@@ -143,7 +142,7 @@
     bind:clientHeight={heightUnit}
     bind:this={firstElement}
     style="top: {$firstUnitStore.y}px">
-    <PikachuUnit />
+    <SpaceshipUnit />
   </div>
 
   <div
@@ -151,6 +150,6 @@
     bind:clientHeight={heightSecondElement}
     bind:this={secondElement}
     style="top: {$secondUnitStore.y}px">
-    <BulbazavrUnit />
+    <UfoUnit />
   </div>
 </div>
