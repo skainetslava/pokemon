@@ -1,6 +1,8 @@
 import { firstUnitStore } from "../stores/firstUnit.js";
 import { secondUnitStore } from "../stores/secondUnit.js";
 import { getRandomInteger } from "../utils/getRandomInteger.js";
+import { statesStore } from "../stores/states.js";
+
 import { get } from "svelte/store";
 
 let value = getRandomInteger(0, 5);
@@ -13,9 +15,10 @@ export const updateSpeed = () => {
   }, 1000);
 };
 
-export function moveFirstUnit(heightField, heightUnit) {
-  let firstStore = get(firstUnitStore);
-  if (firstStore.y > heightField - heightUnit) {
+export function moveFirstUnit() {
+  const heightField = get(statesStore);
+  const firstStore = get(firstUnitStore);
+  if (firstStore.y > heightField - 80) {
     value = -value;
   }
 
@@ -27,10 +30,11 @@ export function moveFirstUnit(heightField, heightUnit) {
   return true;
 }
 
-export function moveSecondUnit(heightField, heightUnit) {
-  let secondStore = get(secondUnitStore);
+export function moveSecondUnit() {
+  const heightField = get(statesStore);
+  const secondStore = get(secondUnitStore);
 
-  if (secondStore.y > heightField - heightUnit) {
+  if (secondStore.y > heightField - 80) {
     value1 = -value1;
   }
 

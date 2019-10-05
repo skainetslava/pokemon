@@ -1,9 +1,9 @@
-export const checkCollision = (skill, enemy) => {
+export const checkCollision = (skill, aim) => {
   if (
-    skill.x < enemy.x + 24 &&
-    skill.x + 20 > enemy.x &&
-    skill.y < enemy.y + 68 &&
-    skill.y + 30 > enemy.y
+    skill.x < aim.x + 24 &&
+    skill.x + 20 > aim.x &&
+    skill.y < aim.y + 68 &&
+    skill.y + 30 > aim.y
   ) {
     return true;
   }

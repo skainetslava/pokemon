@@ -14,6 +14,7 @@
   export let enemy;
   export let mate;
 
+  let state = "";
   const dispatch = createEventDispatcher();
   const direction = [true, false];
 
@@ -32,7 +33,7 @@
 
   const move = ({ speedX, speedY }) => {
     if (x < 1200 && x > 0) {
-      if (y >= heightField - 50) {
+      if (y >= heightField - 25) {
         reverse = true;
       }
       if (y <= 0) {
@@ -52,6 +53,10 @@
 
   const checking = aim => {
     if (!checkCollision(skill, aim)) {
+      return;
+    }
+    if(aim.defence && aim.defence.duration) {
+      state = "disabled";
       return;
     }
     skillsStore.remove({ id: skill.id });
@@ -76,8 +81,12 @@
     transition: left 2s ease-in-out top 2s;
     top: 50%;
   }
+  .disabled {
+    background: blue;
+    opacity: 0.3;
+  }
 </style>
 
 <div>
-  <div class="light" style="left: {x}px; top: {y}px" />
+  <div class="light {state}" style="left: {x}px; top: {y}px" />
 </div>

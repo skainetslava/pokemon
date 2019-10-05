@@ -7,13 +7,15 @@
 
   import Skill from "./skill.svelte";
   import animate from "../utils/animate.js";
-
+  import { isPlayingStore } from "../stores/states.js";
   import { moveFirstUnit, moveSecondUnit, updateSpeed } from "../game/move.js";
   import { generateSkill } from "../game/enemyBehaviour.js";
+  import { startGame } from "../game/startGame.js";
 
   import { skillsStore } from "../stores/skills.js";
   import { firstUnitStore } from "../stores/firstUnit.js";
   import { secondUnitStore } from "../stores/secondUnit.js";
+  import { statesStore } from "../stores/states.js";
 
   let widthField;
   let heightField;
@@ -33,14 +35,24 @@
     x: $firstUnitStore.x,
     y: $firstUnitStore.y
   };
+  let shieldClass = "";
+  
+  $: {
+    shieldClass = $firstUnitStore.defence.duration ? "shield" : "";
+  }
 
+  $: {
+    if ($isPlayingStore) {
+      startGame();
+    }
+  }
   onMount(() => {
     enemy.height = heightSecondElement;
-
-    animate(() => moveFirstUnit(heightField, heightUnit));
-    animate(() => moveSecondUnit(heightField, heightUnit));
-    updateSpeed();
-    generateSkill();
+    statesStore.update(() => heightField);
+    // animate(() => moveFirstUnit(heightField, heightUnit));
+    // animate(() => moveSecondUnit(heightField, heightUnit));
+    // updateSpeed();
+    // generateSkill();
   });
 
   let damages = [];
@@ -88,6 +100,11 @@
     position: absolute;
     left: 5%;
   }
+  .shield {
+    padding: 30px;
+    border: 1px solid white;
+    border-radius: 50%;
+  }
 
   .unit2 {
     position: absolute;
@@ -133,12 +150,12 @@
       {skill}
       on:trigger={handleTrigger}
       on:remove={handleRemove}
-      {mate}
-      {enemy} />
+      mate={$firstUnitStore}
+      enemy={$secondUnitStore} />
   {/each}
 
   <div
-    class="unit1"
+    class="unit1 {shieldClass}"
     bind:clientHeight={heightUnit}
     bind:this={firstElement}
     style="top: {$firstUnitStore.y}px">
