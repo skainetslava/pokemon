@@ -67,7 +67,6 @@
     });
 
     const interval = setInterval(() => {
-      console.log(timerSuperFire);
       if (!$isPlayingStore) {
         return;
       }

@@ -17,7 +17,7 @@ export function startGame(isPlaying) {
 export function checkEndingGame(healthFirstUnit, healthSecondUnit) {
   if (healthFirstUnit < 0 || healthSecondUnit < 0) {
     isEndedGame.update(() => true);
-    isPlayingStore.update(() => true);
+    isPlayingStore.update(() => false);
   }
 }
 
