@@ -1,22 +1,23 @@
 import { firstUnitStore } from "../stores/firstUnit.js";
 import { secondUnitStore } from "../stores/secondUnit.js";
 import { getRandomInteger } from "../utils/getRandomInteger.js";
-import { statesStore } from "../stores/states.js";
-
+import { heightFieldStore } from "../stores/states.js";
+import { freezeGame } from "../game/freezeGame.js";
 import { get } from "svelte/store";
 
 let value = getRandomInteger(0, 5);
 let value1 = getRandomInteger(0, 5);
 
 export const updateSpeed = () => {
-  setInterval(() => {
+  const interval = setInterval(() => {
+    freezeGame(interval);
     value = getRandomInteger(-5, 5);
     value1 = getRandomInteger(-5, 5);
   }, 1000);
 };
 
 export function moveFirstUnit() {
-  const heightField = get(statesStore);
+  const heightField = get(heightFieldStore);
   const firstStore = get(firstUnitStore);
   if (firstStore.y > heightField - 80) {
     value = -value;
@@ -31,7 +32,7 @@ export function moveFirstUnit() {
 }
 
 export function moveSecondUnit() {
-  const heightField = get(statesStore);
+  const heightField = get(heightFieldStore);
   const secondStore = get(secondUnitStore);
 
   if (secondStore.y > heightField - 80) {

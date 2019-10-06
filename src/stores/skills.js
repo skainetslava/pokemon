@@ -13,8 +13,9 @@ function createSkills() {
         newSkills[index] = { ...skills[index], x, y };
         return [...newSkills];
       }),
-    add: (has) => update(skills => {
-      return [...skills, { id: Date.now(), has }]
+    add: ({...params}) => update(skills => {
+      console.log([...skills, { id: Date.now(), ...params }])
+      return [...skills, { id: Date.now(), ...params }]
     }),
     remove: event => update(skills => [...skills.filter(item => item.id !== event.id)])
   };

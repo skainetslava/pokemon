@@ -27,11 +27,11 @@
   }
 </style>
 
-{#each items as item}
-  <svg
-    class="star"
-    style=" top: {item.top}%; left: {item.left}%; box-shadow: 0 0 {item.brigth}px 0rgba(255,
-    255, 255, 0.7); 
-    height: {item.height}px;
-    width: {item.width}px;" />
-{/each}
+<div>
+  {#each items as item}
+    <svg
+      class="star"
+      style=" top: {item.top}%; left: {item.left}%; box-shadow: 0 0 {item.brigth}px
+      0rgba(255, 255, 255, 0.7); height: {item.height}px; width: {item.width}px;" />
+  {/each}
+</div>

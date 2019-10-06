@@ -4,64 +4,49 @@
 
   import SpaceshipUnit from "./icons/spaceship.svelte";
   import UfoUnit from "./icons/ufo.svelte";
+  import { getRandomInteger } from "../utils/getRandomInteger.js";
 
   import Skill from "./skill.svelte";
-  import animate from "../utils/animate.js";
   import { isPlayingStore } from "../stores/states.js";
   import { moveFirstUnit, moveSecondUnit, updateSpeed } from "../game/move.js";
   import { generateSkill } from "../game/enemyBehaviour.js";
-  import { startGame } from "../game/startGame.js";
+  import { startGame, checkEndingGame } from "../game/startGame.js";
 
   import { skillsStore } from "../stores/skills.js";
   import { firstUnitStore } from "../stores/firstUnit.js";
   import { secondUnitStore } from "../stores/secondUnit.js";
-  import { statesStore } from "../stores/states.js";
+  import { heightFieldStore } from "../stores/states.js";
 
   let widthField;
   let heightField;
 
   let firstElement;
-  let heightUnit;
-  let heightSecondElement;
-
   let secondElement;
 
-  $: enemy = {
-    x: $secondUnitStore.x,
-    y: $secondUnitStore.y
-  };
+  let shieldClass;
 
-  $: mate = {
-    x: $firstUnitStore.x,
-    y: $firstUnitStore.y
-  };
-  let shieldClass = "";
-  
   $: {
     shieldClass = $firstUnitStore.defence.duration ? "shield" : "";
   }
 
   $: {
-    if ($isPlayingStore) {
-      startGame();
-    }
+    startGame($isPlayingStore);
   }
+
+  $: {
+    checkEndingGame($firstUnitStore.health, $secondUnitStore.health);
+  }
+
   onMount(() => {
-    enemy.height = heightSecondElement;
-    statesStore.update(() => heightField);
-    // animate(() => moveFirstUnit(heightField, heightUnit));
-    // animate(() => moveSecondUnit(heightField, heightUnit));
-    // updateSpeed();
-    // generateSkill();
+    heightFieldStore.update(() => heightField);
   });
 
   let damages = [];
-  const addDamage = unit => {
+  const addDamage = (unit, dmg) => {
     const id = Date.now();
-
     damages.push({
       id,
-      value: -2,
+      value: dmg,
       top: unit.y,
       left: unit.x
     });
@@ -77,23 +62,23 @@
   };
 
   const handleTrigger = ({ detail: { has } }) => {
+    const dmg = getRandomInteger(-40, -2);
     if (has === "enemy") {
-      firstUnitStore.update({ health: $firstUnitStore.health - 2 });
-      addDamage($firstUnitStore);
+      firstUnitStore.update({ health: $firstUnitStore.health + dmg });
+      addDamage($firstUnitStore, dmg);
     } else {
-      secondUnitStore.update({ health: $secondUnitStore.health - 2 });
-      addDamage($secondUnitStore);
+      secondUnitStore.update({ health: $secondUnitStore.health + dmg });
+      addDamage($secondUnitStore, dmg);
     }
   };
 </script>
 
-<style lang="scss">
+<style>
   .field {
     grid-area: field;
     position: relative;
     width: 1168px;
     height: 100%;
-    border: 1px solid green;
     border-radius: 2px;
   }
   .unit1 {
@@ -146,7 +131,6 @@
     <Skill
       {widthField}
       {heightField}
-      {heightUnit}
       {skill}
       on:trigger={handleTrigger}
       on:remove={handleRemove}
@@ -156,7 +140,6 @@
 
   <div
     class="unit1 {shieldClass}"
-    bind:clientHeight={heightUnit}
     bind:this={firstElement}
     style="top: {$firstUnitStore.y}px">
     <SpaceshipUnit />
@@ -164,7 +147,6 @@
 
   <div
     class="unit2"
-    bind:clientHeight={heightSecondElement}
     bind:this={secondElement}
     style="top: {$secondUnitStore.y}px">
     <UfoUnit />

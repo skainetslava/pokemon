@@ -1,6 +1,7 @@
 <script>
   export let id;
   export let time;
+  export let maxTime;
   export let className = "background";
 
   import { createEventDispatcher } from "svelte";
@@ -34,7 +35,7 @@
     transition: all 0.3s;
   }
   .card:hover {
-     opacity: 0.7;
+    opacity: 0.7;
   }
   .background {
     background: #800119;
@@ -43,7 +44,7 @@
 
 <div class="card {className}" on:click={handleTrigger}>
   {#if time > 0}
-    <div class="disable" style="height: {time*10}%"></div>
+    <div class="disable" style="height: {(time / maxTime) * 100}%" />
   {/if}
   <slot />
 </div>

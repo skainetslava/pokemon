@@ -4,35 +4,45 @@ function createFirstUnit() {
   const { subscribe, set, update } = writable({
     x: 90,
     y: 0,
-    health: 100,
+    health: 10,
     energy: 100,
     shield: 100,
     fire: { reload: 0 },
+    superFire: { reload: 0 },
     defence: { reload: 0, duration: 0 }
   });
 
   return {
     subscribe,
-    update: ({ x, y, health }) =>
+    update: ({ ...stats }) =>
       update(unit => {
         return {
           ...unit,
-          x: x || unit.x,
-          y: y || unit.y,
-          health: health || unit.health
+          ...stats
         };
       }),
-    overcharge: ({ energy, ...fire }) =>
+    overcharge: ({ energy, reloadSuperFire, reloadFire }) =>
       update(unit => {
         const energyState = energy ? unit.energy - energy : unit.energy;
+        const reloadFireState = reloadFire !== undefined ? reloadFire : unit.fire.reload;
+        const reloadSuperFireState = reloadSuperFire !== undefined  ? reloadSuperFire : unit.superFire.reload;
         return {
           ...unit,
           energy: energyState,
-          fire: { ...unit.fire, ...fire }
+          fire: { ...unit.fire, reload: reloadFireState },
+          superFire: { ...unit.superFire, reload: reloadSuperFireState }
         };
       }),
-    defend: stats =>
+    restore: energy =>
       update(unit => {
+        return {
+          ...unit,
+          energy: unit.energy + energy
+        };
+      }),
+    defend: ({...stats}) =>
+      update(unit => {
+        console.log(unit)
         return {
           ...unit,
           defence: {

@@ -1,30 +1,31 @@
 <script>
   import { onMount, afterUpdate, createEventDispatcher } from "svelte";
 
-  import animate from "../utils/animate.js";
+  import { animate } from "../game/startGame.js";
   import { getRandomInteger } from "../utils/getRandomInteger.js";
+  import { isPlayingStore } from "../stores/states.js";
 
   import { checkCollision } from "../game/checkCollision.js";
   import { skillsStore } from "../stores/skills.js";
 
   export let widthField;
   export let heightField;
-  export let heightUnit;
   export let skill;
   export let enemy;
   export let mate;
 
-  let state = "";
   const dispatch = createEventDispatcher();
   const direction = [true, false];
 
+  let stateSkill = skill.type === "super" ? "red" : "yellow";
   let x = skill.has === "mate" ? mate.x : enemy.x;
-  let y =
-    skill.has === "mate" ? mate.y + heightUnit / 2 : enemy.y + heightUnit / 2;
+  let y = skill.has === "mate" ? mate.y + 39 : enemy.y + 39;
 
-  onMount(() => {
-    animate(() => move(speed));
-  });
+  $: {
+    if ($isPlayingStore) {
+      animate(() => move(speed));
+    }
+  }
 
   afterUpdate(() => {
     const aim = skill.has === "mate" ? enemy : mate;
@@ -55,12 +56,12 @@
     if (!checkCollision(skill, aim)) {
       return;
     }
-    if(aim.defence && aim.defence.duration) {
-      state = "disabled";
+    if (aim.defence && aim.defence.duration) {
+      stateSkill = "disabled";
       return;
     }
     skillsStore.remove({ id: skill.id });
-    dispatch("trigger", { has: skill.has});
+    dispatch("trigger", { has: skill.has });
   };
 
   let reverse = direction[getRandomInteger(0, 1)];
@@ -71,22 +72,42 @@
   };
 </script>
 
-<style lang="scss">
+<style>
   .light {
     height: 20px;
     width: 20px;
-    background: yellow;
     border-radius: 50%;
     position: absolute;
     transition: left 2s ease-in-out top 2s;
     top: 50%;
   }
+  .yellow {
+    background: yellow;
+  }
+  .red {
+    height: 50px;
+    width: 4px;
+
+    background: red;
+    border-radius: 25%;
+    animation: spin 1s linear infinite;
+  }
   .disabled {
     background: blue;
     opacity: 0.3;
   }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 </style>
 
 <div>
-  <div class="light {state}" style="left: {x}px; top: {y}px" />
+  <div class="light {stateSkill}" style="left: {x}px; top: {y}px" />
 </div>
