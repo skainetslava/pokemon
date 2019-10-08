@@ -1,13 +1,5 @@
 # Pokemon
+The small game made by Svelte 3 and Sapper.
 
-The default
-
-```bash
-# for webpack
-cd my-app
-npm install 
-npm run dev
-```
-
-Open up [localhost:3000](http://localhost:3000) and start clicking around.
+https://spacegame-svelte.herokuapp.com/
 
