@@ -95,7 +95,6 @@
 </style>
 
 <div class="cards">
-{timerSuperFire}
   <Card id={0} on:trigger={handleFire} time={timerFire} maxTime={10}>
     <FireIcon />
   </Card>

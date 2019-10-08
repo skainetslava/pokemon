@@ -1,10 +1,10 @@
-import { writable, get } from "svelte/store";
+import { writable } from "svelte/store";
 
 function createFirstUnit() {
   const { subscribe, set, update } = writable({
     x: 90,
     y: 0,
-    health: 10,
+    health: 100,
     energy: 100,
     shield: 100,
     fire: { reload: 0 },
@@ -42,7 +42,6 @@ function createFirstUnit() {
       }),
     defend: ({...stats}) =>
       update(unit => {
-        console.log(unit)
         return {
           ...unit,
           defence: {
