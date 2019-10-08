@@ -1,4 +1,4 @@
-# Space Game Svelte
+# Space Game by Svelte 
 The small game made by Svelte 3 and Sapper.
 
 https://spacegame-svelte.herokuapp.com/
