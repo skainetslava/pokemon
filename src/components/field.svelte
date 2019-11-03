@@ -61,8 +61,8 @@
     skillsStore.remove(event);
   };
 
-  const handleTrigger = ({ detail: { has } }) => {
-    const dmg = getRandomInteger(-40, -2);
+  const handleTrigger = ({ detail: { has, type } }) => {
+    const dmg = type === "super" ? getRandomInteger(-40, -20) : getRandomInteger(-20, -2);
     if (has === "enemy") {
       firstUnitStore.update({ health: $firstUnitStore.health + dmg });
       addDamage($firstUnitStore, dmg);

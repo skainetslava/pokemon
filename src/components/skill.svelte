@@ -61,7 +61,7 @@
       return;
     }
     skillsStore.remove({ id: skill.id });
-    dispatch("trigger", { has: skill.has });
+    dispatch("trigger", { ...skill });
   };
 
   let reverse = direction[getRandomInteger(0, 1)];

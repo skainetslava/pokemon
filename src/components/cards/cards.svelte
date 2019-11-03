@@ -8,18 +8,21 @@
   import { isPlayingStore } from "../../stores/states.js";
   import { freezeGame } from "../../game/freezeGame.js";
 
+  const RELOAD_STANDART  = 10;
+  const RELOAD_SUPER = 20;
+
   $: timerFire = $firstUnitStore.fire.reload;
   $: timerSuperFire = $firstUnitStore.superFire.reload;
   $: energy = $firstUnitStore.energy;
   $: timeReloadShield = $firstUnitStore.defence.reload;
 
   const handleFire = () => {
-    if (timerFire || energy < 40 || !$isPlayingStore) {
+    if (timerFire || energy < RELOAD_STANDART || !$isPlayingStore) {
       return;
     }
 
     skillsStore.add({ has: "mate", type: "standart" });
-    firstUnitStore.overcharge({ reloadFire: 10, energy: 20 });
+    firstUnitStore.overcharge({ reloadFire: RELOAD_STANDART, energy: RELOAD_STANDART });
 
     const interval = setInterval(() => {
       if (!$isPlayingStore) {
@@ -38,7 +41,7 @@
       return;
     }
 
-    firstUnitStore.defend({ reload: 10, duration: true });
+    firstUnitStore.defend({ reload: RELOAD_STANDART, duration: true });
 
     const interval = setInterval(() => {
       if (!$isPlayingStore) {
@@ -56,14 +59,14 @@
   };
 
   const handleSuperFire = () => {
-    if (timerSuperFire || energy < 60 || !$isPlayingStore) {
+    if (timerSuperFire || energy < RELOAD_SUPER || !$isPlayingStore) {
       return;
     }
 
     skillsStore.add({ has: "mate", type: "super" });
     firstUnitStore.overcharge({
-      reloadSuperFire: 40,
-      energy: 60
+      reloadSuperFire: RELOAD_SUPER,
+      energy: RELOAD_SUPER
     });
 
     const interval = setInterval(() => {
@@ -110,7 +113,7 @@
     id={2}
     on:trigger={handleSuperFire}
     className="blue"
-    maxTime={40}
+    maxTime={20}
     time={timerSuperFire}>
     <LaserIcon />
   </Card>

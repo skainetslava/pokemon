@@ -87,7 +87,7 @@
   <div class="game">
     {#if $isEndedGame}
       <div in:fly={{ y: -200, duration: 1000 }} class="end-modal">
-        <h1>End</h1>
+        <h1>Game over</h1>
       </div>
     {:else}
       <div class="state" on:click={handleStopGame}>
